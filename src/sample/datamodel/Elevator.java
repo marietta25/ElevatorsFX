@@ -55,9 +55,16 @@ public class Elevator implements Runnable {
         synchronized (calledFloors) {
             while (upRequests.isEmpty() && downRequests.isEmpty() && this.requestedFloorsUp.isEmpty() && this.requestedFloorsDown.isEmpty()) {
                 // no floor calls nor passenger requests are left to serve
+                this.currentDirection = "IDLE";
                 System.out.println(color + this.elevatorNumber + " is Waiting for a floor call..");
                 calledFloors.wait();
             }
+            //
+            Elevator foundOne = controlSystem.findElevator(calledFloors);
+            if (foundOne != null) {
+                System.out.println("find elev" + controlSystem.findElevator(calledFloors).getElevatorNumber());
+            }
+
             // sort passenger requests
             Collections.sort(this.requestedFloorsUp);
             Collections.sort(this.requestedFloorsDown);
@@ -76,6 +83,8 @@ public class Elevator implements Runnable {
                     }
 
                     // select floor call that is closest to the elevator
+                    // only works when there are multiple floor calls to choose from
+                    // depends on the thread that is executed first
                     int distance;
                     int minDistance = 12;
 

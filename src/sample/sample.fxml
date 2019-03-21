@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
+
 <GridPane fx:controller="sample.Controller"
           xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" gridLinesVisible="false">
 
@@ -14,79 +15,79 @@
     <Button fx:id="callButton" GridPane.rowIndex="2" GridPane.columnIndex="2" text="Call elevator"
         onAction="#onCallButtonClicked"/>
 
-    <Label text="13" GridPane.rowIndex="4" GridPane.columnIndex="3" />
+    <Label fx:id="floor13" text="13" GridPane.rowIndex="4" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="4" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="4" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="4" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="12" GridPane.rowIndex="5" GridPane.columnIndex="3" />
+    <Label fx:id="floor12" text="12" GridPane.rowIndex="5" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="5" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="5" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="5" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="11" GridPane.rowIndex="6" GridPane.columnIndex="3" />
+    <Label fx:id="floor11" text="11" GridPane.rowIndex="6" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="6" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="6" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="6" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="10" GridPane.rowIndex="7" GridPane.columnIndex="3" />
+    <Label fx:id="floor10" text="10" GridPane.rowIndex="7" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="7" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="7" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="7" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="9" GridPane.rowIndex="8" GridPane.columnIndex="3" />
+    <Label fx:id="floor9" text="9" GridPane.rowIndex="8" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="8" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="8" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="8" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="8" GridPane.rowIndex="9" GridPane.columnIndex="3" />
+    <Label fx:id="floor8" text="8" GridPane.rowIndex="9" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="9" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="9" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="9" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="7" GridPane.rowIndex="10" GridPane.columnIndex="3" />
+    <Label fx:id="floor7" text="7" GridPane.rowIndex="10" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="10" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="10" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="10" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="6" GridPane.rowIndex="11" GridPane.columnIndex="3" />
+    <Label fx:id="floor6" text="6" GridPane.rowIndex="11" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="11" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="11" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="11" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="5" GridPane.rowIndex="12" GridPane.columnIndex="3" />
+    <Label fx:id="floor5" text="5" GridPane.rowIndex="12" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="12" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="12" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="12" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="4" GridPane.rowIndex="13" GridPane.columnIndex="3" />
+    <Label fx:id="floor4" text="4" GridPane.rowIndex="13" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="13" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="13" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="13" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="3" GridPane.rowIndex="14" GridPane.columnIndex="3" />
+    <Label fx:id="floor3" text="3" GridPane.rowIndex="14" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="14" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="14" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="14" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="2" GridPane.rowIndex="15" GridPane.columnIndex="3" />
+    <Label fx:id="floor2" text="2" GridPane.rowIndex="15" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="15" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="15" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="15" GridPane.columnIndex="6" disable="true"/>
 
-    <Label text="1" GridPane.rowIndex="16" GridPane.columnIndex="3" />
+    <Label fx:id="floor1" text="1" GridPane.rowIndex="16" GridPane.columnIndex="3" />
 
     <Button GridPane.rowIndex="16" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="16" GridPane.columnIndex="5" disable="true"/>

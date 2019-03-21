@@ -19,6 +19,42 @@ public class ControlSystem {
         this.downRequests = new ArrayList<>();
     }
 
+    public Elevator findElevator(List<FloorCall> calls) {
+        if (calls.isEmpty()) {
+            System.out.println("No calls, no need for an elevator");
+            return null;
+        }
+        FloorCall next = calls.get(0);
+        int distance;
+        int minDistance = 12;
+        Elevator selectedElevator = null;
+
+        List<Elevator> idleElevators = new ArrayList<>();
+        for (Elevator el : this.elevators) {
+            if (el.getCurrentDirection().equals("IDLE")) {
+                idleElevators.add(el);
+            }
+        }
+        if (idleElevators.isEmpty()) {
+            System.out.println("All elevators are busy servicing requests");
+            return null;
+        }
+        if (idleElevators.size() == 1) {
+            selectedElevator = idleElevators.get(0);
+            return selectedElevator;
+        } else {
+            for (int i = 0; i < idleElevators.size(); i++) {
+                Elevator currentEl = idleElevators.get(i);
+                distance = Math.abs(next.getStartFloor() - currentEl.getCurrentFloor());
+                if (distance <= minDistance) {
+                    minDistance = distance;
+                    selectedElevator = currentEl;
+                }
+            }
+            return selectedElevator;
+        }
+    }
+
     // find and return requested floor call from main requests list
     private synchronized FloorCall findStop(int startFloor, int destinationFloor) {
         for (FloorCall current : this.calledFloors) {
