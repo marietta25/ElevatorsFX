@@ -38,7 +38,6 @@ public class Controller {
 
     @FXML
     public void onCallButtonClicked(ActionEvent e) {
-        System.out.println("Calling from " + startFloor.getText() + " to " + targetFloor.getText());
         try {
             int fromFloor = Integer.parseInt(startFloor.getText());
             int toFloor = Integer.parseInt(targetFloor.getText());

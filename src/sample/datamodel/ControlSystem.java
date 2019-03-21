@@ -73,11 +73,9 @@ public class ControlSystem {
             if (direction.toLowerCase().equals("up")) {
                 this.upRequests.remove(findStop(floor, destinationFloor));
                 this.calledFloors.remove(findStop(floor, destinationFloor));
-                System.out.println("Removing floor call from up requests");
             } else if (direction.toLowerCase().equals("down")) {
                 this.downRequests.remove(findStop(floor, destinationFloor));
                 this.calledFloors.remove(findStop(floor, destinationFloor));
-                System.out.println("Removing floor call from down requests");
             } else {
                 System.out.println("Check direction parameter");
             }
@@ -128,7 +126,6 @@ public class ControlSystem {
 
                 this.upRequests.add(new FloorCall(startFloor, destinationFloor, direction));
                 Collections.sort(this.upRequests, FloorCall.FloorCallSort);
-                this.upRequests.notifyAll();
                 System.out.println("Added floor call from " + startFloor + " to " + destinationFloor + " to uprequest list");
                 return true;
             }
@@ -138,7 +135,6 @@ public class ControlSystem {
 
                 this.downRequests.add(new FloorCall(startFloor, destinationFloor, direction));
                 Collections.sort(this.downRequests, FloorCall.FloorCallSort);
-                this.downRequests.notifyAll();
                 System.out.println("Added floor call from " + startFloor + " to " + destinationFloor + " to downrequests list");
                 return true;
             }
