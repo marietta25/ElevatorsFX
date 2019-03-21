@@ -55,15 +55,22 @@ public class Elevator implements Runnable {
         synchronized (calledFloors) {
             while (upRequests.isEmpty() && downRequests.isEmpty() && this.requestedFloorsUp.isEmpty() && this.requestedFloorsDown.isEmpty()) {
                 // no floor calls nor passenger requests are left to serve
-                System.out.println(color + this.elevatorNumber + " is Waiting for a floor call..");
+                this.currentDirection = "IDLE";
+                System.out.println(color + "[" + this.elevatorNumber + "] is Waiting for a floor call..");
                 calledFloors.wait();
             }
+            //
+//            Elevator foundOne = controlSystem.findElevator(calledFloors);
+//            if (foundOne != null) {
+//                System.out.println("find elev" + controlSystem.findElevator(calledFloors).getElevatorNumber());
+//            }
+
             // sort passenger requests
             Collections.sort(this.requestedFloorsUp);
             Collections.sort(this.requestedFloorsDown);
 
-            System.out.println(color + this.elevatorNumber + " pressed up buttons " + this.requestedFloorsUp);
-            System.out.println(color + this.elevatorNumber + " pressed down buttons " + this.requestedFloorsDown);
+            System.out.println(color + "[" + this.elevatorNumber + "] passenger requests to go up " + this.requestedFloorsUp);
+            System.out.println(color + "[" + this.elevatorNumber + "] passenger requests to go down " + this.requestedFloorsDown);
 
             if (this.requestedFloorsUp.isEmpty() && this.requestedFloorsDown.isEmpty()) {
                 // only floor calls, eg no passenger requests yet
@@ -71,17 +78,15 @@ public class Elevator implements Runnable {
 
                 if (!upRequests.isEmpty()) {
                     // there are requested floor calls to go up
-                    for (FloorCall call : upRequests) {
-                        System.out.println(color + "iterating elev " + this.elevatorNumber + " calls " + call.getStartFloor() + " " + call.getDestinationFloor());
-                    }
 
                     // select floor call that is closest to the elevator
+                    // only works when there are multiple floor calls to choose from
+                    // depends on the thread that is executed first
                     int distance;
                     int minDistance = 12;
 
                     for (FloorCall calledFrom : upRequests) {
                         distance = Math.abs(this.currentFloor - calledFrom.getStartFloor());
-                        System.out.println("Distance from " + calledFrom.getStartFloor() + " " + distance);
                         if (distance <= minDistance) {
                             minDistance = distance;
                             nextStop = calledFrom;
@@ -94,7 +99,7 @@ public class Elevator implements Runnable {
                     List<FloorCall> stopsToRemove = new ArrayList<>();
                     for (FloorCall current : upRequests) {
                         if (current.getStartFloor() == nextStop.getStartFloor()) {
-                            System.out.println("Found more up requests from the same floor " + current.getDestinationFloor());
+                            System.out.println(color + "[" + this.elevatorNumber + "] Found more up requests from the same floor " + current.getDestinationFloor());
                             stopsToRemove.add(current);
                             this.requestedFloorsUp.add(current.getDestinationFloor());
                             controlSystem.removeStop(current.getStartFloor(), current.getDestinationFloor(), "up");
@@ -112,7 +117,6 @@ public class Elevator implements Runnable {
 
                     for (FloorCall calledFrom : downRequests) {
                         distance = Math.abs(this.currentFloor - calledFrom.getStartFloor());
-                        System.out.println("Distance from " + calledFrom.getStartFloor() + " " + distance);
                         if (distance <= minDistance) {
                             minDistance = distance;
                             nextStop = calledFrom;
@@ -125,7 +129,7 @@ public class Elevator implements Runnable {
                     List<FloorCall> stopsToRemove = new ArrayList<>();
                     for (FloorCall current : downRequests) {
                         if (current.getStartFloor() == nextStop.getStartFloor()) {
-                            System.out.println("Found more down requests from the same floor " + current.getDestinationFloor());
+                            System.out.println(color + "[" + this.elevatorNumber +"] Found more down requests from the same floor " + current.getDestinationFloor());
                             stopsToRemove.add(current);
                             this.requestedFloorsDown.add(current.getDestinationFloor());
                             controlSystem.removeStop(current.getStartFloor(), current.getDestinationFloor(), "down");
@@ -133,11 +137,9 @@ public class Elevator implements Runnable {
                     }
                     // remove found double requests
                     downRequests.removeAll(stopsToRemove);
-
                     controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "down");
                 }
 
-                System.out.println(color + "1---getnextstop " + nextStop.getStartFloor());
                 if (nextStop.getDirection() == 1) {
                     this.requestedFloorsUp.add(nextStop.getDestinationFloor());
                 } else if (nextStop.getDirection() == 0) {
@@ -153,31 +155,23 @@ public class Elevator implements Runnable {
                 Integer requestedStop;
 
                 Integer nextUpRequest = this.requestedFloorsUp.get(0);
-                System.out.println(color + "2----- nextuprequest " + nextUpRequest);
-
 
                 if (!upRequests.isEmpty()) {
                     // there are pending floor calls
-                    for (FloorCall call : upRequests) {
-                        System.out.println(color + "iterating elev " + this.elevatorNumber + " calls " + call.getStartFloor() + " " + call.getDestinationFloor());
-                    }
                     nextStop = upRequests.get(0);
 
                     if (nextStop.getStartFloor() == nextUpRequest) {
                         // remove double floor calls
-                        System.out.println("Remove double up call");
                         this.requestedFloorsUp.remove(nextUpRequest);
                     }
                     this.requestedFloorsUp.add(nextStop.getDestinationFloor());
                 } else {
                     // there are no pending calls, only passenger requests from floor ie only integers
                     requestedStop = nextUpRequest;
-                    System.out.println(color + " only passenger request");
                     this.requestedFloorsUp.remove(requestedStop);
                     return requestedStop;
                 }
 
-                System.out.println(color + "2----getnextstop " + nextStop.getStartFloor());
                 upRequests.remove(nextStop);
                 controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "up");
                 calledFloors.notifyAll();
@@ -196,7 +190,6 @@ public class Elevator implements Runnable {
 
                     if (nextStop.getStartFloor() == nextDownRequest) {
                         // remove double floor calls
-                        System.out.println("Remove double down call");
                         this.requestedFloorsDown.remove(nextDownRequest);
                     }
 
@@ -204,12 +197,10 @@ public class Elevator implements Runnable {
                 } else {
                     // there are no pending calls, only passenger requests from floor ie only integers
                     requestedStop = nextDownRequest;
-                    System.out.println(color + " only passenger request");
                     this.requestedFloorsDown.remove(requestedStop);
                     return requestedStop;
                 }
 
-                System.out.println(color + "3----getnextstop " + nextStop.getStartFloor());
                 downRequests.remove(nextStop);
                 controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "down");
                 calledFloors.notifyAll();
@@ -224,7 +215,7 @@ public class Elevator implements Runnable {
 
     private void stop() {
         // reached floor that the request came from or reached requested destination floor
-        System.out.println(color + "Elevator " + this.elevatorNumber + " stopping on floor " + this.currentFloor);
+        System.out.println(color + "[" + this.elevatorNumber + "] STOPPING on floor " + this.currentFloor);
         this.inMove = false;
 
         // pause elevator to let passengers out / in
@@ -251,7 +242,7 @@ public class Elevator implements Runnable {
         determineDirection();
 
         if (this.currentFloor != destinationFloor) {
-            System.out.println(color + "Elevator " + this.elevatorNumber + " is starting to move from floor " + this.currentFloor);
+            System.out.println(color + "[" + this.elevatorNumber + "] starting to move from floor " + this.currentFloor);
         }
 
         while (true) {
@@ -259,13 +250,13 @@ public class Elevator implements Runnable {
                 this.currentDirection = "DOWN";
                 pauseThread(2000);
                 this.currentFloor--;
-                System.out.println(color + "Elevator " + this.elevatorNumber + " is going " + this.currentDirection + ", reached floor " + this.currentFloor);
+                System.out.println(color + "[" + this.elevatorNumber + "] going " + this.currentDirection + ", reached floor " + this.currentFloor);
             } else if (destinationFloor > this.currentFloor) {
 
                 this.currentDirection = "UP";
                 pauseThread(2000);
                 this.currentFloor++;
-                System.out.println(color + "Elevator " + this.elevatorNumber + " is going " + this.currentDirection + ", reached floor " + this.currentFloor);
+                System.out.println(color + "[" + this.elevatorNumber + "] going " + this.currentDirection + ", reached floor " + this.currentFloor);
             } else {
                 // reached destination floor
                 this.currentFloor = destinationFloor;
@@ -313,7 +304,7 @@ public class Elevator implements Runnable {
 
             try {
                 int nextStop = getNextStop();
-                System.out.println(color + "Elevator " + elevatorNumber + " is servicing next request to floor " + nextStop);
+                System.out.println(color + "[" + elevatorNumber + "] is servicing next request to floor " + nextStop);
                 move(nextStop);
             } catch (InterruptedException e) {
                 e.printStackTrace();

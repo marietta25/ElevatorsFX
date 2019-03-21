@@ -19,6 +19,42 @@ public class ControlSystem {
         this.downRequests = new ArrayList<>();
     }
 
+    public Elevator findElevator(List<FloorCall> calls) {
+        if (calls.isEmpty()) {
+            System.out.println("No calls, no need for an elevator");
+            return null;
+        }
+        FloorCall next = calls.get(0);
+        int distance;
+        int minDistance = 12;
+        Elevator selectedElevator = null;
+
+        List<Elevator> idleElevators = new ArrayList<>();
+        for (Elevator el : this.elevators) {
+            if (el.getCurrentDirection().equals("IDLE")) {
+                idleElevators.add(el);
+            }
+        }
+        if (idleElevators.isEmpty()) {
+            System.out.println("All elevators are busy servicing requests");
+            return null;
+        }
+        if (idleElevators.size() == 1) {
+            selectedElevator = idleElevators.get(0);
+            return selectedElevator;
+        } else {
+            for (int i = 0; i < idleElevators.size(); i++) {
+                Elevator currentEl = idleElevators.get(i);
+                distance = Math.abs(next.getStartFloor() - currentEl.getCurrentFloor());
+                if (distance <= minDistance) {
+                    minDistance = distance;
+                    selectedElevator = currentEl;
+                }
+            }
+            return selectedElevator;
+        }
+    }
+
     // find and return requested floor call from main requests list
     private synchronized FloorCall findStop(int startFloor, int destinationFloor) {
         for (FloorCall current : this.calledFloors) {
@@ -37,11 +73,9 @@ public class ControlSystem {
             if (direction.toLowerCase().equals("up")) {
                 this.upRequests.remove(findStop(floor, destinationFloor));
                 this.calledFloors.remove(findStop(floor, destinationFloor));
-                System.out.println("Removing floor call from up requests");
             } else if (direction.toLowerCase().equals("down")) {
                 this.downRequests.remove(findStop(floor, destinationFloor));
                 this.calledFloors.remove(findStop(floor, destinationFloor));
-                System.out.println("Removing floor call from down requests");
             } else {
                 System.out.println("Check direction parameter");
             }
@@ -92,7 +126,6 @@ public class ControlSystem {
 
                 this.upRequests.add(new FloorCall(startFloor, destinationFloor, direction));
                 Collections.sort(this.upRequests, FloorCall.FloorCallSort);
-                this.upRequests.notifyAll();
                 System.out.println("Added floor call from " + startFloor + " to " + destinationFloor + " to uprequest list");
                 return true;
             }
@@ -102,7 +135,6 @@ public class ControlSystem {
 
                 this.downRequests.add(new FloorCall(startFloor, destinationFloor, direction));
                 Collections.sort(this.downRequests, FloorCall.FloorCallSort);
-                this.downRequests.notifyAll();
                 System.out.println("Added floor call from " + startFloor + " to " + destinationFloor + " to downrequests list");
                 return true;
             }

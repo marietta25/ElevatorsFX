@@ -2,8 +2,9 @@ package sample;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import sample.datamodel.Building;
 import sample.datamodel.ControlSystem;
 import sample.datamodel.Elevator;
@@ -11,15 +12,13 @@ import sample.datamodel.FloorCall;
 
 public class Controller {
     @FXML
-    private TextField destinationFrom13, destinationFrom12, destinationFrom11, destinationFrom10, destinationFrom9;
+    private TextField startFloor;
     @FXML
-    private TextField destinationFrom8, destinationFrom7, destinationFrom6, destinationFrom5, destinationFrom4;
+    private TextField targetFloor;
     @FXML
-    private TextField destinationFrom3, destinationFrom2, destinationFrom1;
+    private Label el1, el2, el3;
     @FXML
-    private Button d13, d12, u12, d11, u11, d10, u10, d9, u9, d8, u8, d7, u7;
-    @FXML
-    private Button d6, u6, d5, u5, d4, u4, d3, u3, d2, u2, u1;
+    private Label floor13, floor12, floor11, floor10, floor9, floor8, floor7, floor6, floor5, floor4, floor3, floor2, floor1;
 
     private static Building building = new Building();
     private static ControlSystem controlSystem = building.getControlSystem();
@@ -34,53 +33,69 @@ public class Controller {
             Elevator current = building.getElevators().get(i);
             current.getThread().start();
         }
+
     }
 
     @FXML
-    public void onDirectionButtonClicked(ActionEvent e) {
-        if (e.getSource().equals(d13)) {
-            System.out.println("You clicked " + destinationFrom13.getText() + " from floor 13");
-            int toFloor = Integer.parseInt(destinationFrom13.getText());
-            makeFloorCall(13, toFloor);
-        } else if (e.getSource().equals(d12) || e.getSource().equals(u12)) {
-            int toFloor = Integer.parseInt(destinationFrom12.getText());
-            makeFloorCall(12, toFloor);
-        } else if (e.getSource().equals(d11) || e.getSource().equals(u11)) {
-            int toFloor = Integer.parseInt(destinationFrom11.getText());
-            makeFloorCall(11, toFloor);
-        } else if (e.getSource().equals(d10) || e.getSource().equals(u10)) {
-            int toFloor = Integer.parseInt(destinationFrom10.getText());
-            makeFloorCall(10, toFloor);
-        } else if (e.getSource().equals(d9) || e.getSource().equals(u9)) {
-            int toFloor = Integer.parseInt(destinationFrom9.getText());
-            makeFloorCall(9, toFloor);
-        } else if (e.getSource().equals(d8) || e.getSource().equals(u8)) {
-            int toFloor = Integer.parseInt(destinationFrom8.getText());
-            makeFloorCall(8, toFloor);
-        } else if (e.getSource().equals(d7) || e.getSource().equals(u7)) {
-            int toFloor = Integer.parseInt(destinationFrom7.getText());
-            makeFloorCall(7, toFloor);
-        } else if (e.getSource().equals(d6) || e.getSource().equals(u6)) {
-            int toFloor = Integer.parseInt(destinationFrom6.getText());
-            makeFloorCall(6, toFloor);
-        } else if (e.getSource().equals(d5) || e.getSource().equals(u5)) {
-            int toFloor = Integer.parseInt(destinationFrom5.getText());
-            makeFloorCall(5, toFloor);
-        } else if (e.getSource().equals(d4) || e.getSource().equals(u4)) {
-            int toFloor = Integer.parseInt(destinationFrom4.getText());
-            makeFloorCall(4, toFloor);
-        } else if (e.getSource().equals(d3) || e.getSource().equals(u3)) {
-            int toFloor = Integer.parseInt(destinationFrom3.getText());
-            makeFloorCall(3, toFloor);
-        } else if (e.getSource().equals(d2) || e.getSource().equals(u2)) {
-            int toFloor = Integer.parseInt(destinationFrom2.getText());
-            makeFloorCall(2, toFloor);
-        } else if (e.getSource().equals(u1)) {
-            int toFloor = Integer.parseInt(destinationFrom1.getText());
-            makeFloorCall(1, toFloor);
+    public void onCallButtonClicked(ActionEvent e) {
+        try {
+            int fromFloor = Integer.parseInt(startFloor.getText());
+            int toFloor = Integer.parseInt(targetFloor.getText());
+            makeFloorCall(fromFloor, toFloor);
+            startFloor.clear();
+            targetFloor.clear();
+            colorLabel(fromFloor);
+            colorLabel(toFloor);
+        } catch (NumberFormatException ne) {
+            System.out.println("Invalid input");
         }
-
     }
+
+    @FXML
+    public void colorLabel(int floor) {
+        switch (floor) {
+            case 1:
+                floor1.setTextFill(Color.RED);
+                break;
+            case 2:
+                floor2.setTextFill(Color.RED);
+                break;
+            case 3:
+                floor3.setTextFill(Color.RED);
+                break;
+            case 4:
+                floor4.setTextFill(Color.RED);
+                break;
+            case 5:
+                floor5.setTextFill(Color.RED);
+                break;
+            case 6:
+                floor6.setTextFill(Color.RED);
+                break;
+            case 7:
+                floor7.setTextFill(Color.RED);
+                break;
+            case 8:
+                floor8.setTextFill(Color.RED);
+                break;
+            case 9:
+                floor9.setTextFill(Color.RED);
+                break;
+            case 10:
+                floor10.setTextFill(Color.RED);
+                break;
+            case 11:
+                floor11.setTextFill(Color.RED);
+                break;
+            case 12:
+                floor12.setTextFill(Color.RED);
+                break;
+            case 13:
+                floor13.setTextFill(Color.RED);
+                break;
+        }
+    }
+
     public void makeFloorCall(int fromFloor, int toFloor) {
         int direction;
         if (fromFloor > 13 || fromFloor < 1 || toFloor > 13 || toFloor < 1) {
