@@ -92,5 +92,9 @@
     <Button GridPane.rowIndex="16" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="16" GridPane.columnIndex="6" disable="true"/>
 
+    <Label fx:id="el1" GridPane.rowIndex="18" GridPane.columnIndex="7" />
+    <Label fx:id="el2" GridPane.rowIndex="18" GridPane.columnIndex="8" />
+    <Label fx:id="el3" GridPane.rowIndex="18" GridPane.columnIndex="9" />
+
 
 </GridPane>
