@@ -3,133 +3,94 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Label?>
 <GridPane fx:controller="sample.Controller"
-          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" gridLinesVisible="true">
+          xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" gridLinesVisible="false">
 
-    <Button text="13" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom13" maxWidth="30" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-    <Button fx:id="d13" text="DOWN" GridPane.rowIndex="1" GridPane.columnIndex="3"
-        onAction="#onDirectionButtonClicked"/>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="4" disable="true"/>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="5" disable="true"/>
-    <Button GridPane.rowIndex="1" GridPane.columnIndex="6" disable="true"/>
+    <Label GridPane.rowIndex="1" GridPane.columnIndex="0" text="Call elevator from floor:"/>
+    <Label GridPane.rowIndex="1" GridPane.columnIndex="1" text="to floor: " />
+    <TextField fx:id="startFloor" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+    <TextField fx:id="targetFloor" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    <Button fx:id="callButton" GridPane.rowIndex="2" GridPane.columnIndex="2" text="Call elevator"
+        onAction="#onCallButtonClicked"/>
 
-    <Button text="12" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom12" maxWidth="30" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-    <Button fx:id="u12" text="UP" GridPane.rowIndex="2" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d12" text="DOWN" GridPane.rowIndex="2" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
-    <Button GridPane.rowIndex="2" GridPane.columnIndex="4" disable="true"/>
-    <Button GridPane.rowIndex="2" GridPane.columnIndex="5" disable="true"/>
-    <Button GridPane.rowIndex="2" GridPane.columnIndex="6" disable="true"/>
+    <Label text="13" GridPane.rowIndex="4" GridPane.columnIndex="3" />
 
-    <Button text="11" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom11" maxWidth="30" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-    <Button fx:id="u11" text="UP" GridPane.rowIndex="3" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d11" text="DOWN" GridPane.rowIndex="3" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
-    <Button GridPane.rowIndex="3" GridPane.columnIndex="4" disable="true"/>
-    <Button GridPane.rowIndex="3" GridPane.columnIndex="5" disable="true"/>
-    <Button GridPane.rowIndex="3" GridPane.columnIndex="6" disable="true"/>
-
-    <Button text="10" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom10" maxWidth="30" GridPane.rowIndex="4" GridPane.columnIndex="1" />
-    <Button fx:id="u10" text="UP" GridPane.rowIndex="4" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d10" text="DOWN" GridPane.rowIndex="4" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked"/>
     <Button GridPane.rowIndex="4" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="4" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="4" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="9" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom9" maxWidth="30" GridPane.rowIndex="5" GridPane.columnIndex="1" />
-    <Button fx:id="u9" text="UP" GridPane.rowIndex="5" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d9" text="DOWN" GridPane.rowIndex="5" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="12" GridPane.rowIndex="5" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="5" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="5" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="5" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="8" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom8" maxWidth="30" GridPane.rowIndex="6" GridPane.columnIndex="1" />
-    <Button fx:id="u8" text="UP" GridPane.rowIndex="6" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d8" text="DOWN" GridPane.rowIndex="6" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="11" GridPane.rowIndex="6" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="6" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="6" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="6" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="7" GridPane.rowIndex="7" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom7" maxWidth="30" GridPane.rowIndex="7" GridPane.columnIndex="1" />
-    <Button fx:id="u7" text="UP" GridPane.rowIndex="7" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d7" text="DOWN" GridPane.rowIndex="7" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="10" GridPane.rowIndex="7" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="7" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="7" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="7" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="6" GridPane.rowIndex="8" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom6" maxWidth="30" GridPane.rowIndex="8" GridPane.columnIndex="1" />
-    <Button fx:id="u6" text="UP" GridPane.rowIndex="8" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d6" text="DOWN" GridPane.rowIndex="8" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="9" GridPane.rowIndex="8" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="8" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="8" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="8" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="5" GridPane.rowIndex="9" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom5" maxWidth="30" GridPane.rowIndex="9" GridPane.columnIndex="1" />
-    <Button fx:id="u5" text="UP" GridPane.rowIndex="9" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d5" text="DOWN" GridPane.rowIndex="9" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="8" GridPane.rowIndex="9" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="9" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="9" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="9" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="4" GridPane.rowIndex="10" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom4" maxWidth="30" GridPane.rowIndex="10" GridPane.columnIndex="1" />
-    <Button fx:id="u4" text="UP" GridPane.rowIndex="10" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d4" text="DOWN" GridPane.rowIndex="10" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="7" GridPane.rowIndex="10" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="10" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="10" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="10" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="3" GridPane.rowIndex="11" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom3" maxWidth="30" GridPane.rowIndex="11" GridPane.columnIndex="1" />
-    <Button fx:id="u3" text="UP" GridPane.rowIndex="11" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d3" text="DOWN" GridPane.rowIndex="11" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="6" GridPane.rowIndex="11" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="11" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="11" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="11" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="2" GridPane.rowIndex="12" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom2" maxWidth="30" GridPane.rowIndex="12" GridPane.columnIndex="1" />
-    <Button fx:id="u2" text="UP" GridPane.rowIndex="12" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
-    <Button fx:id="d2" text="DOWN" GridPane.rowIndex="12" GridPane.columnIndex="3"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="5" GridPane.rowIndex="12" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="12" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="12" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="12" GridPane.columnIndex="6" disable="true"/>
 
-    <Button text="1" GridPane.rowIndex="13" GridPane.columnIndex="0" />
-    <TextField fx:id="destinationFrom1" maxWidth="30" GridPane.rowIndex="13" GridPane.columnIndex="1" />
-    <Button fx:id="u1" text="UP" GridPane.rowIndex="13" GridPane.columnIndex="2"
-            onAction="#onDirectionButtonClicked" />
+    <Label text="4" GridPane.rowIndex="13" GridPane.columnIndex="3" />
+
     <Button GridPane.rowIndex="13" GridPane.columnIndex="4" disable="true"/>
     <Button GridPane.rowIndex="13" GridPane.columnIndex="5" disable="true"/>
     <Button GridPane.rowIndex="13" GridPane.columnIndex="6" disable="true"/>
+
+    <Label text="3" GridPane.rowIndex="14" GridPane.columnIndex="3" />
+
+    <Button GridPane.rowIndex="14" GridPane.columnIndex="4" disable="true"/>
+    <Button GridPane.rowIndex="14" GridPane.columnIndex="5" disable="true"/>
+    <Button GridPane.rowIndex="14" GridPane.columnIndex="6" disable="true"/>
+
+    <Label text="2" GridPane.rowIndex="15" GridPane.columnIndex="3" />
+
+    <Button GridPane.rowIndex="15" GridPane.columnIndex="4" disable="true"/>
+    <Button GridPane.rowIndex="15" GridPane.columnIndex="5" disable="true"/>
+    <Button GridPane.rowIndex="15" GridPane.columnIndex="6" disable="true"/>
+
+    <Label text="1" GridPane.rowIndex="16" GridPane.columnIndex="3" />
+
+    <Button GridPane.rowIndex="16" GridPane.columnIndex="4" disable="true"/>
+    <Button GridPane.rowIndex="16" GridPane.columnIndex="5" disable="true"/>
+    <Button GridPane.rowIndex="16" GridPane.columnIndex="6" disable="true"/>
+
 
 </GridPane>
