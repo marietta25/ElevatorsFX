@@ -17,3 +17,4 @@ elevator is currently idle and closest to the requested floor
 - visual: moving of elevators not yet implemented in app window. Movements are currently logged to console, each elevator 
 thread in different color, --coloring works in IntelliJ)
 - visual: if elevator stops at requested floor, mark the floor request as uncalled (change the color)
+- tests!
