@@ -11,6 +11,7 @@ public class Elevator implements Runnable {
     private int elevatorNumber;
     private int currentFloor;
     private boolean inMove;
+    private boolean servicingUpCall;
     private String currentDirection;
     private ArrayList<Integer> requestedFloorsUp;
     private ArrayList<Integer> requestedFloorsDown;
@@ -27,6 +28,8 @@ public class Elevator implements Runnable {
             this.currentFloor = currentFloor;
         }
 
+        this.inMove = false;
+        this.servicingUpCall = false;
         this.currentDirection = "UP";
         this.requestedFloorsUp = new ArrayList<>();
         this.requestedFloorsDown = new ArrayList<>();
@@ -47,23 +50,18 @@ public class Elevator implements Runnable {
     // FIXME! ugly spaghetti code
     // return next stop for an elevator
     private int getNextStop() throws InterruptedException {
-        List<FloorCall> calledFloors = controlSystem.getCalledFloors();
-        ArrayList<FloorCall> upRequests = controlSystem.getUpRequests();
-        ArrayList<FloorCall> downRequests = controlSystem.getDownRequests();
+        List<String> calledFloors = controlSystem.getCalledFloors();
 
+        synchronized (controlSystem.getCalledFloors()) {
+            List<Integer> upRequests = controlSystem.getGoUpFrom();
+            List<Integer> downRequests = controlSystem.getGoDownFrom();
 
-        synchronized (calledFloors) {
             while (upRequests.isEmpty() && downRequests.isEmpty() && this.requestedFloorsUp.isEmpty() && this.requestedFloorsDown.isEmpty()) {
                 // no floor calls nor passenger requests are left to serve
                 this.currentDirection = "IDLE";
                 System.out.println(color + "[" + this.elevatorNumber + "] is Waiting for a floor call..");
-                calledFloors.wait();
+                controlSystem.getCalledFloors().wait();
             }
-            //
-//            Elevator foundOne = controlSystem.findElevator(calledFloors);
-//            if (foundOne != null) {
-//                System.out.println("find elev" + controlSystem.findElevator(calledFloors).getElevatorNumber());
-//            }
 
             // sort passenger requests
             Collections.sort(this.requestedFloorsUp);
@@ -72,154 +70,93 @@ public class Elevator implements Runnable {
             System.out.println(color + "[" + this.elevatorNumber + "] passenger requests to go up " + this.requestedFloorsUp);
             System.out.println(color + "[" + this.elevatorNumber + "] passenger requests to go down " + this.requestedFloorsDown);
 
-            if (this.requestedFloorsUp.isEmpty() && this.requestedFloorsDown.isEmpty()) {
-                // only floor calls, eg no passenger requests yet
-                FloorCall nextStop = null;
 
-                if (!upRequests.isEmpty()) {
-                    // there are requested floor calls to go up
+            int nextStop = -1;
+            String callDirection = "up";
 
-                    // select floor call that is closest to the elevator
-                    // only works when there are multiple floor calls to choose from
-                    // depends on the thread that is executed first
-                    int distance;
-                    int minDistance = 12;
-
-                    for (FloorCall calledFrom : upRequests) {
-                        distance = Math.abs(this.currentFloor - calledFrom.getStartFloor());
-                        if (distance <= minDistance) {
-                            minDistance = distance;
-                            nextStop = calledFrom;
-                        }
-                    }
-
-                    upRequests.remove(nextStop);
-
-                    // find if there is more requests to go up from that floor
-                    List<FloorCall> stopsToRemove = new ArrayList<>();
-                    for (FloorCall current : upRequests) {
-                        if (current.getStartFloor() == nextStop.getStartFloor()) {
-                            System.out.println(color + "[" + this.elevatorNumber + "] Found more up requests from the same floor " + current.getDestinationFloor());
-                            stopsToRemove.add(current);
-                            this.requestedFloorsUp.add(current.getDestinationFloor());
-                            controlSystem.removeStop(current.getStartFloor(), current.getDestinationFloor(), "up");
-                        }
-                    }
-                    // remove found double requests
-                    upRequests.removeAll(stopsToRemove);
-
-                    controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "up");
-                } else {
-                    // there are requested floor calls to go down
-                    // select floor call that is closest to the elevator
-                    int distance;
-                    int minDistance = 12;
-
-                    for (FloorCall calledFrom : downRequests) {
-                        distance = Math.abs(this.currentFloor - calledFrom.getStartFloor());
-                        if (distance <= minDistance) {
-                            minDistance = distance;
-                            nextStop = calledFrom;
-                        }
-                    }
-
-                    downRequests.remove(nextStop);
-
-                    // find if there is more requests to go down on that floor
-                    List<FloorCall> stopsToRemove = new ArrayList<>();
-                    for (FloorCall current : downRequests) {
-                        if (current.getStartFloor() == nextStop.getStartFloor()) {
-                            System.out.println(color + "[" + this.elevatorNumber +"] Found more down requests from the same floor " + current.getDestinationFloor());
-                            stopsToRemove.add(current);
-                            this.requestedFloorsDown.add(current.getDestinationFloor());
-                            controlSystem.removeStop(current.getStartFloor(), current.getDestinationFloor(), "down");
-                        }
-                    }
-                    // remove found double requests
-                    downRequests.removeAll(stopsToRemove);
-                    controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "down");
-                }
-
-                if (nextStop.getDirection() == 1) {
-                    this.requestedFloorsUp.add(nextStop.getDestinationFloor());
-                } else if (nextStop.getDirection() == 0) {
-                    this.requestedFloorsDown.add(nextStop.getDestinationFloor());
-                }
-
-                calledFloors.notifyAll();
-                return nextStop.getStartFloor();
-
-            } else if (!this.requestedFloorsUp.isEmpty()) {
-                // there are passenger requests to go up (made from inside the elevator)
-                FloorCall nextStop;
-                Integer requestedStop;
-
-                Integer nextUpRequest = this.requestedFloorsUp.get(0);
-
-                if (!upRequests.isEmpty()) {
-                    // there are pending floor calls
+            if (this.currentDirection.equals("IDLE") || this.currentDirection.equals("UP")) {
+                if (upRequests.isEmpty() && this.requestedFloorsUp.isEmpty()) {
+                    this.currentDirection = "DOWN";
+                } else if (!upRequests.isEmpty() && !this.requestedFloorsUp.isEmpty()) {
+                    // todo - ...
                     nextStop = upRequests.get(0);
-
-                    if (nextStop.getStartFloor() == nextUpRequest) {
-                        // remove double floor calls
-                        this.requestedFloorsUp.remove(nextUpRequest);
+                    if (this.requestedFloorsUp.contains(nextStop)) {
+                        // remove duplicate stops
+                        this.requestedFloorsUp.remove(Integer.valueOf(nextStop));
                     }
-                    this.requestedFloorsUp.add(nextStop.getDestinationFloor());
+                    this.servicingUpCall = true;
+                } else if (!upRequests.isEmpty()) {
+                    nextStop = upRequests.get(0);
+                    this.servicingUpCall = true;
                 } else {
-                    // there are no pending calls, only passenger requests from floor ie only integers
-                    requestedStop = nextUpRequest;
-                    this.requestedFloorsUp.remove(requestedStop);
-                    return requestedStop;
+                    nextStop = this.requestedFloorsUp.get(0);
+                    this.requestedFloorsUp.remove(Integer.valueOf(nextStop));
                 }
-
-                upRequests.remove(nextStop);
-                controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "up");
-                calledFloors.notifyAll();
-                return nextStop.getStartFloor();
-
-            } else if (!this.requestedFloorsDown.isEmpty()) {
-                // there are passenger requests to go down (made from inside the elevator)
-                FloorCall nextStop;
-                Integer requestedStop;
-
-                Integer nextDownRequest = this.requestedFloorsDown.get(this.requestedFloorsDown.size()-1);
-
-                if (!downRequests.isEmpty()) {
-                    // there are pending floor calls
-                    nextStop = downRequests.get(downRequests.size()-1);
-
-                    if (nextStop.getStartFloor() == nextDownRequest) {
-                        // remove double floor calls
-                        this.requestedFloorsDown.remove(nextDownRequest);
-                    }
-
-                    this.requestedFloorsDown.add(nextStop.getDestinationFloor());
-                } else {
-                    // there are no pending calls, only passenger requests from floor ie only integers
-                    requestedStop = nextDownRequest;
-                    this.requestedFloorsDown.remove(requestedStop);
-                    return requestedStop;
-                }
-
-                downRequests.remove(nextStop);
-                controlSystem.removeStop(nextStop.getStartFloor(), nextStop.getDestinationFloor(), "down");
-                calledFloors.notifyAll();
-                return nextStop.getStartFloor();
-
-            } else {
-                System.out.println(color + " Something went wrong - got no next stop");
-                return -1;
             }
+
+            if (this.currentDirection.equals("DOWN")) {
+                callDirection = "down";
+                // direction down
+                if (downRequests.isEmpty() && this.requestedFloorsDown.isEmpty()) {
+                    this.currentDirection = "UP";
+                } else if(!downRequests.isEmpty() && !this.requestedFloorsDown.isEmpty()) {
+                    nextStop = downRequests.get(downRequests.size() - 1);
+                    if (this.requestedFloorsDown.contains(nextStop)) {
+                        this.requestedFloorsDown.remove(Integer.valueOf(nextStop));
+                    }
+                    this.servicingUpCall = false;
+                } else if (!downRequests.isEmpty()) {
+                    nextStop = downRequests.get(downRequests.size() - 1);
+                    this.servicingUpCall = false;
+                } else {
+                    nextStop = this.requestedFloorsDown.get(this.requestedFloorsDown.size() - 1);
+                    this.requestedFloorsDown.remove(Integer.valueOf(nextStop));
+                }
+            }
+
+            if (callDirection.equals("up")) {
+                upRequests.remove(Integer.valueOf(nextStop));
+                controlSystem.removeStop(nextStop, "up");
+                calledFloors.remove(nextStop + "up");
+            } else {
+                downRequests.remove(Integer.valueOf(nextStop));
+                controlSystem.removeStop(nextStop, "down");
+                calledFloors.remove(nextStop + "down");
+            }
+
+            return nextStop;
         }
     }
+
 
     private void stop() {
         // reached floor that the request came from or reached requested destination floor
         System.out.println(color + "[" + this.elevatorNumber + "] STOPPING on floor " + this.currentFloor);
         this.inMove = false;
 
+        // requests to go up or down from the current floor
+        Floor stoppedFloor = controlSystem.getFloors().get(this.currentFloor-1);
+        List<Integer> requestsUp = stoppedFloor.getRequestsToGoUp();
+        List<Integer> requestsDown = stoppedFloor.getRequestsToGoDown();
+
+        // add passenger requests to elevator stops and remove them from floor object
+        if (this.servicingUpCall) {
+            this.currentDirection = "UP";
+            for (Integer floor : requestsUp) {
+                this.requestedFloorsUp.add(Integer.valueOf(floor));
+            }
+            requestsUp.removeAll(this.requestedFloorsUp);
+        } else {
+            this.currentDirection = "DOWN";
+            for (Integer floor : requestsDown) {
+                this.requestedFloorsDown.add(Integer.valueOf(floor));
+
+            }
+            requestsDown.removeAll(this.requestedFloorsDown);
+        }
+
         // pause elevator to let passengers out / in
-        pauseThread(5000);
+        pauseThread(4000);
     }
 
     // pause elevator thread for a given time (e.g move between floors, let passengers out, etc
