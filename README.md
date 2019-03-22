@@ -2,7 +2,7 @@
 
 JavaFX 11 project
 
-Simple application to move 3 elevators up and down inside a 13-story building.
+Simple multi-threaded application to move 3 elevators up and down inside a 13-story building.
 
 Main requirements:
 - it takes 2 seconds for an elevator to move 1 floor up or down
@@ -14,6 +14,9 @@ Main requirements:
 Knows bugs and a to-do list
 - there is no way to be sure which elevator is the first to answer a call, eg there isn't a method to determine which
 elevator is currently idle and closest to the requested floor
+- if a floor call is made from the same floor and direction as an already existing call, it counts as a separate floor request.
+That means 2 elevators will go to the same floor, first one to arrive will move to the next passenger requested floor, the 
+second one will wait for the next floor call to be made.
 - visual: moving of elevators not yet implemented in app window. Movements are currently logged to console, each elevator 
 thread in different color, --coloring works in IntelliJ)
 - visual: if elevator stops at requested floor, mark the floor request as uncalled (change the color)
