@@ -16,7 +16,7 @@ public class Building {
     }
 
     public void generateElevators() {
-        // at the start, place 3 elevators on different floors and give them differently colored outputs (in intelliJ)
+        // at the start, place 3 elevators on floors 1, 6 and 12 and give them differently colored outputs (in intelliJ)
         this.elevators.add(0, new Elevator(1, 1, controlSystem, ThreadColor.ANSI_BLUE));
         this.elevators.add(1, new Elevator(2, 6, controlSystem, ThreadColor.ANSI_GREEN));
         this.elevators.add(2, new Elevator(3, 12, controlSystem, ThreadColor.ANSI_PURPLE));
@@ -31,18 +31,6 @@ public class Building {
 
     public List<Elevator> getElevators() {
         return elevators;
-    }
-
-    public void setElevators(List<Elevator> elevators) {
-        this.elevators = elevators;
-    }
-
-    public List<Floor> getFloors() {
-        return floors;
-    }
-
-    public void setFloors(List<Floor> floors) {
-        this.floors = floors;
     }
 
     public ControlSystem getControlSystem() {

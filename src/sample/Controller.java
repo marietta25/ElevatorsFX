@@ -111,8 +111,12 @@ public class Controller {
             return;
         }
         FloorCall newCall = controlSystem.makeFloorCall(fromFloor, toFloor, direction);
-        if (!controlSystem.addFloorCall(newCall)) {
-            System.out.println("Could not add floor request to call stack");
+        if (newCall == null) {
+            System.out.println("Did not make new floorcall");
+        } else {
+            if (!controlSystem.addFloorCall(newCall)) {
+                System.out.println("Could not add floor request to call stack");
+            }
         }
     }
 }
