@@ -10,7 +10,6 @@ public class Elevator implements Runnable {
 
     private int elevatorNumber;
     private int currentFloor;
-    private boolean inMove;
     private boolean servicingUpCall;
     private String currentDirection;
     private ArrayList<Integer> requestedFloorsUp;
@@ -28,7 +27,6 @@ public class Elevator implements Runnable {
             this.currentFloor = currentFloor;
         }
 
-        this.inMove = false;
         this.servicingUpCall = false;
         this.currentDirection = "UP";
         this.requestedFloorsUp = new ArrayList<>();
@@ -84,6 +82,7 @@ public class Elevator implements Runnable {
                         // remove duplicate stops
                         this.requestedFloorsUp.remove(Integer.valueOf(nextStop));
                     }
+                    //
                     this.servicingUpCall = true;
                 } else if (!upRequests.isEmpty()) {
                     nextStop = upRequests.get(0);
@@ -132,7 +131,6 @@ public class Elevator implements Runnable {
     private void stop() {
         // reached floor that the request came from or reached requested destination floor
         System.out.println(color + "[" + this.elevatorNumber + "] STOPPING on floor " + this.currentFloor);
-        this.inMove = false;
 
         // requests to go up or down from the current floor
         Floor stoppedFloor = controlSystem.getFloors().get(this.currentFloor-1);
@@ -175,7 +173,6 @@ public class Elevator implements Runnable {
             return;
         }
 
-        this.inMove = true;
         determineDirection();
 
         if (this.currentFloor != destinationFloor) {
@@ -201,30 +198,6 @@ public class Elevator implements Runnable {
                 return;
             }
         }
-    }
-
-    public int getElevatorNumber() {
-        return elevatorNumber;
-    }
-
-    public int getCurrentFloor() {
-        return currentFloor;
-    }
-
-    public boolean isInMove() {
-        return inMove;
-    }
-
-    public String getCurrentDirection() {
-        return currentDirection;
-    }
-
-    public ArrayList<Integer> getRequestedFloorsUp() {
-        return requestedFloorsUp;
-    }
-
-    public ArrayList<Integer> getRequestedFloorsDown() {
-        return requestedFloorsDown;
     }
 
     public Thread getThread() {

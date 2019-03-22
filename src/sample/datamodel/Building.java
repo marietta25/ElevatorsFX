@@ -33,18 +33,6 @@ public class Building {
         return elevators;
     }
 
-    public void setElevators(List<Elevator> elevators) {
-        this.elevators = elevators;
-    }
-
-    public List<Floor> getFloors() {
-        return floors;
-    }
-
-    public void setFloors(List<Floor> floors) {
-        this.floors = floors;
-    }
-
     public ControlSystem getControlSystem() {
         return controlSystem;
     }

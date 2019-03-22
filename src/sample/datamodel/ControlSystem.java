@@ -142,10 +142,6 @@ public class ControlSystem {
         }
     }
 
-    public List<Elevator> getElevators() {
-        return elevators;
-    }
-
     public List<Floor> getFloors() {
         return floors;
     }

@@ -47,14 +47,6 @@ public class Floor {
         return newCall;
     }
 
-    public int getFloorNumber() {
-        return floorNumber;
-    }
-
-    public void setFloorNumber(int floorNumber) {
-        this.floorNumber = floorNumber;
-    }
-
     public List<Integer> getRequestsToGoDown() {
         return requestsToGoDown;
     }
